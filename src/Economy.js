@@ -8,12 +8,18 @@ class Economy extends EventEmitter {
      */
     constructor (client, prefix) {
         if (!client) throw new SyntaxError('Invalid Discord client')
+        if (!prefix) throw new SyntaxError('Invalid Bot Prefix')
         super()
 
 this.client = client;
 this.prefix = prefix
 this.db = db;
 }
+start() {
 
 
 }
+
+
+}
+module.exports = Economy;
