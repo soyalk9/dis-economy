@@ -1,3 +1,3 @@
 module.exports = {
-Economy: require("./src/Economy.js");
+Economy: require("./src/Economy.js")
 }
