@@ -153,7 +153,7 @@ else if(cmd == "with" || cmd == "withdraw") {
     this.db.subtract(`bank_${message.author.id}`, amount)
   }
 }//with cmd
-slse if(cmd === "beg") {
+else if(cmd === "beg") {
 let money = await this.db.get(`money_${message.author.id}`)
   let coolpu = await this.db.get(`coolpu_${message.author.id}`)
   let timeout = 600000
