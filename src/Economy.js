@@ -64,8 +64,95 @@ if(cmd === "bal" || cmd === "balance") {
   message.channel.send(embed).catch(console.log)
 
 }
-
-
+else if(cmd == "dep" || cmd === "deposit") {
+  
+  let money = await this.db.get(`money_${message.author.id}`)
+  let job = await this.db.get(`job_${message.author.id}`)
+  let bank = await this.db.get(`bank_${message.author.id}`) 
+  let limit = await this.db.get(`limit_${message.author.id}`)
+  let amount = parseInt(args[0])
+  let bankk = limit-bank
+  
+  if(!money) money = 0;
+  if(!bank) bank = 0;
+  if(bank === limit) return message.channel.send(`Your bank is full! you cannot deposit anymore money in bank\nYou can increase your bank limit by working`)   
+  if(amount > bankk) return message.channel.send(`You don't have enough space in bank to deposit ${amount} <:meowcoin:759993220108648509>`) 
+  if(amount > money) return message.channel.send(`You cannot deposit more than you have .-.`)
+  if(args[0].includes("-")) return message.channel.send(`You cannot deposit negative amount`)
+  
+ if(args[0] === "all".toLowerCase()) {
+   
+   let bal;
+   if(money > limit) bal = bankk
+   if(money === limit) bal = money
+   if(money < limit) bal = money
+   if(money === 0) return message.channel.send(`You cannot deposit empty balance`)
+    
+   
+    const embed = new discord.MessageEmbed()
+    .setAuthor(`Successfully Deposited!`, message.author.avatarURL({dymamic: true}))
+    .setDescription(`Successfully deposited all your money`)
+    .setColor(this.options.color)
+    .setFooter(`You cannot deposit more than the limit of bank`)
+    
+    message.channel.send(embed)
+    
+    this.db.add(`bank_${message.author.id}`, bal)
+    this.db.subtract(`money_${message.author.id}`, bal)
+ } else {
+   
+   if(!amount) return message.channel.send(`Please provide a valid amount of money to deposit`)
+   if(amount === 0) return message.channel.send(`\`0\` ?? you cannot deposit 0 coins`)
+   
+   const embed = new discord.MessageEmbed()
+   .setAuthor(`Successfully Deposited!`, message.author.avatarURL({dynamic: true}))
+   .setDescription(`Successfully deposited ${amount}${this.options.currency}`)
+   .setColor(this.options.color)
+    
+   message.channel.send(embed)
+   
+   this.db.add(`bank_${message.author.id}`, amount)
+   this.db.subtract(`money_${message.author.id}`, amount) 
+ }
+} //deposit command
+else if(cmd == "with" || cmd == "withdraw") {
+  let amount = parseInt(args[0])
+  let bank = await this.db.get(`bank_${message.author.id}`)
+  
+  if(amount > bank) return message.channel.send(`You cannot withdraw more than you have ._.`)
+  if(args[0].includes("-")) return message.channel.send(`You cannot withdraw negative amount`)
+  
+  if(args[0].toLowerCase() === "all") {
+    
+    if(!bank) return message.channel.send(`You don't have any money to withdraw.`)
+    
+    const embed = new discord.MessageEmbed()
+    .setAuthor(`Successfully withdrew!`, message.author.avatarURL({dynamic: true}))
+    .setDescription(`Successfully withdew all your money`)
+    .setColor(this.options.color)
+    .setFooter(this.client.user.username, this.client.user.avatarURL())
+    
+    message.channel.send(embed)
+    
+    this.db.delete(`bank_${message.author.id}`)
+    this.db.add(`money_${message.author.id}`, bank)
+  } else {
+    
+    if(!bank) return message.channel.send(`You don't have any money to withdraw.`)
+    if(!amount) return message.channel.send(`Please provide a valid amount of money to withdraw.`)
+    
+    const embed = new discord.MessageEmbed()
+    .setAuthor(`Successfully withdrew!`, message.author.avatarURL({dynamic: true}))
+    .setDescription(`Successfully withdrew ${amount}${this.options.currency}`)
+    .setColor(this.options.color)
+    .setFooter(this.client.user.username, this.client.user.avatarURL())
+    
+    message.channel.send(embed)
+    
+    this.db.add(`money_${message.author.id}`, amount)
+    this.db.subtract(`bank_${message.author.id}`, amount)
+  }
+}
 })
 
 }
