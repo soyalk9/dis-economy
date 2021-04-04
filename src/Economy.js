@@ -4,7 +4,8 @@ const db = require("quick.db")
 
 
 const defaultOptions = {
-currency: '$'
+currency: '$',
+color: "RANDOM"
 }
 
 class Economy extends EventEmitter {
