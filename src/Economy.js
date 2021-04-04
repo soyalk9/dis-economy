@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const discord = require('discord.js');
 const { EventEmitter } = require('events');
 const db = require("quick.db");
 const ms = require("parse-ms");
