@@ -60,7 +60,7 @@ if(cmd === "bal" || cmd === "balance") {
   .setAuthor(`${user.user.username}'s Balance`, user.user.displayAvatarURL({dynamic: true}))
   .setDescription(`**💸 Cash**: ${money}${this.options.currency}\n**🏦 Bank**: ${bank}/${limit}${this.options.currency}\n**⚖️ Total Currency**: ${total}${this.options.currency}`)
   .setColor(this.options.color)
-  .setFooter(client.user.username, client.user.avatarURL())
+  .setFooter(this.client.user.username, this.client.user.avatarURL())
   message.channel.send(embed).catch(console.log)
 
 }
