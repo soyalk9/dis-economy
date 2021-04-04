@@ -1,7 +1,7 @@
-const Discord = require('discord.js')
-const { EventEmitter } = require('events')
-const db = require("quick.db")
-
+const Discord = require('discord.js');
+const { EventEmitter } = require('events');
+const db = require("quick.db");
+const ms = require("parse-ms");
 
 const defaultOptions = {
 currency: '$',
@@ -152,7 +152,40 @@ else if(cmd == "with" || cmd == "withdraw") {
     this.db.add(`money_${message.author.id}`, amount)
     this.db.subtract(`bank_${message.author.id}`, amount)
   }
-}
+}//with cmd
+slse if(cmd === "beg") {
+let money = await this.db.get(`money_${message.author.id}`)
+  let coolpu = await this.db.get(`coolpu_${message.author.id}`)
+  let timeout = 600000
+  if(coolpu === true) timeout = 480000
+  let beg = await db.get(`beg_${message.author.id}`)
+  let spookypu = await this.db.get(`spookyp_${message.author.id}`)
+  let coins = Math.floor(Math.random()*50)
+   let be = `Begging gives you random money from 1-50
+You can beg every 10 minutes`
+  let ben = be.split("\n")
+  let begg = ben[Math.floor(Math.random()*ben.length)]
+  
+  if(beg !== null && timeout - (Date.now() - beg) > 0) {
+    let time = ms(timeout - (Date.now() - beg))
+    
+    return message.channel.send(`Chill!, you won't become rich by begging\nYou can beg again in **${time.minutes}**mins, **${time.seconds}**secs`)
+  }
+  
+  const embed = new discord.MessageEmbed()
+  .setAuthor(`Begged`, message.author.avatarURL({dynamic: true}))
+  .setDescription(`You were begging and a rich man gave you ${coins}${this.options.currency}!`)
+  .setColor(this.options.color)
+  .setFooter(begg)
+  
+  db.set("beg_" + message.author.id, Date.now())
+  this.db.add(`money_${message.author.id}`, coins)
+  
+  message.channel.send(embed).catch(console.log)
+  
+}//beg
+
+
 })
 
 }
